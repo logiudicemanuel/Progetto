@@ -96,11 +96,11 @@ export default {
   methods:{
     async getViaggiFatti(){/*Recupera dati dal db Viaggi Fatti*/
       var risposta = await fetch('http://127.0.0.1:8000/api/viaggi-fatti/');
-          this.listaViaggiFatti = await risposta.json();
+      this.listaViaggiFatti = await risposta.json();
     },
     async getViaggiDaFare(){/*Recupera dati dal db Viaggi Da Fare*/
       var risposta = await fetch('http://127.0.0.1:8000/api/viaggi-da-fare/');
-          this.listaViaggiDaFare = await risposta.json();
+      this.listaViaggiDaFare = await risposta.json();
     },
     toggleAggiungiVF(){
       this.aggiungiVFTrue = !this.aggiungiVFTrue;
