@@ -7,7 +7,6 @@ class ViaggiFatti(models.Model):
     Descrizione = models.CharField(max_length=2000, blank=True, default="Nessuna Descrizione")
     Luogo = models.CharField(max_length=64, blank=False)
 
-
     def __str__(self):
         return self.Titolo
         

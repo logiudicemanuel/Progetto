@@ -397,170 +397,38 @@ export default {
         this.ricercaData(element);
       }else if(element.Titolo === null && element.Data === null && element.Luogo !== null){
         this.ricercaLuogo(element);
-      }
-      else if(element.Titolo !== null && element.Data === null && element.Luogo !== null){
-        this.ricercaTitoloLuogo(element);
-      }
-      else if(element.Titolo === null && element.Data !== null && element.Luogo !== null){
-        this.ricercaDataLuogo(element);
-      }
-      else if(element.Titolo !== null && element.Data !== null && element.Luogo === null){
-        this.ricercaTitoloData(element);
-      }else if(element.Titolo !== null && element.Data !== null && element.Luogo !== null){
+      }else{
         this.ricercaCompleta(element);
       }
       this.ricercaON=true;
       this.ricercaOFF=false;
       this.btconferma=false;
     },
-    async ricercaTitolo(element){/*ricerca per titolo anche parziale*/
-      this.listaRicerca= [];
-        await this.getViaggiFatti();
-        var x = 0;
-        var temp = 0;
-        var temp2 = 0;
-        for(var i = 0; i<this.listaViaggiFatti.length;i++){
-          this.splitted = this.listaViaggiFatti[i].Titolo.split(" ");
-          if(element.Titolo.split(" ").length<=1){
-            for(var y = 0; y<this.splitted.length;y++){
-              if(element.Titolo.toLowerCase() === this.splitted[y].toLowerCase()){
-                this.listaRicerca[x] = this.listaViaggiFatti[i];
-                x++;
-              }
-            }
-          }else{
-            var splitted2 = element.Titolo.split(" ");
-            for(var w = 0; w<this.splitted.length;w++){
-              for(var z = 0; z<splitted2.length;z++){
-                if(splitted2[z].toLowerCase() === this.splitted[w].toLowerCase()){
-                  temp2++;
-                  if(temp2 === splitted2.length){
-                    this.Ricerca.Luogo = temp2;
-                    temp=splitted2.length;
-                    temp2=0;
-                  }
-                }
-              }
-            }
-            if(temp === splitted2.length){
-              this.listaRicerca[x]=this.listaViaggiFatti[i];
-              x++;
-              temp=0;
-            }
-          }
-        }
-        if(x === 0){
-          this.listaRicerca= [];  
-        }
+    async ricercaTitolo(element){/*ricerca per titolo*/
+      var risposta = await fetch(`http://127.0.0.1:8000/api/viaggi-fatti/titolo/?search=${element.Titolo}`);
+      this.listaRicerca = await risposta.json();
     },
     async ricercaData(element){/*ricerca per data*/
-      this.listaRicerca= [];
-      await this.getViaggiFatti();
-      var x = 0;
-      for(var i = 0; i<this.listaViaggiFatti.length;i++){
-        if(element.Data.toLowerCase() === this.listaViaggiFatti[i].Data.toLowerCase()){
-          this.listaRicerca[x] = this.listaViaggiFatti[i];
-          x++;
-        }
-      }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
+      var risposta = await fetch(`http://127.0.0.1:8000/api/viaggi-fatti/data/?search=${element.Data}`);
+      this.listaRicerca = await risposta.json();
     },
-    async ricercaLuogo(element){/*ricerca per luogo anche parziale*/
-      this.listaRicerca= [];
-      await this.getViaggiFatti();
-      var x = 0;
-      var temp = 0;
-      var temp2 = 0;
-      for(var i = 0; i<this.listaViaggiFatti.length;i++){
-        this.splitted = this.listaViaggiFatti[i].Luogo.split(" ");
-        if(element.Luogo.split(" ").length<=1){
-          for(var y = 0; y<this.splitted.length;y++){
-            if(element.Luogo.toLowerCase() === this.splitted[y].toLowerCase()){
-              this.listaRicerca[x] = this.listaViaggiFatti[i];
-              x++;
-            }
-          }
-        }else{
-          var splitted2 = element.Luogo.split(" ");
-          for(var w = 0; w<this.splitted.length;w++){
-            for(var z = 0; z<splitted2.length;z++){
-              if(splitted2[z].toLowerCase() === this.splitted[w].toLowerCase()){
-                temp2++;
-                if(temp2 === splitted2.length){ 
-                  temp=splitted2.length;
-                  temp2=0;
-                }
-              }
-            }
-          }
-          if(temp === splitted2.length){
-            this.listaRicerca[x]=this.listaViaggiFatti[i];
-            x++;
-            temp=0;
-          }
-        }
-      }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
-    },
-    async ricercaTitoloData(element){/*ricerca per titolo e data*/
-      this.listaRicerca= [];
-      await this.getViaggiFatti();
-      var x = 0;
-      for(var i = 0; i<this.listaViaggiFatti.length;i++){
-        if(element.Titolo.toLowerCase() === this.listaViaggiFatti[i].Titolo.toLowerCase() && element.Data.toLowerCase() === this.listaViaggiFatti[i].Data.toLowerCase()){
-          this.listaRicerca[x] = this.listaViaggiFatti[i];
-          x++;
-        }
-      }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
-    },
-    async ricercaTitoloLuogo(element){/*ricerca per titolo e luogo*/
-      this.listaRicerca= [];
-      await this.getViaggiFatti();
-      var x = 0;
-      for(var i = 0; i<this.listaViaggiFatti.length;i++){
-        if(element.Titolo.toLowerCase() === this.listaViaggiFatti[i].Titolo.toLowerCase() && element.Luogo.toLowerCase() === this.listaViaggiFatti[i].Luogo.toLowerCase()){
-          this.listaRicerca[x] = this.listaViaggiFatti[i];
-          x++;
-        }
-      }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
-    },
-    async ricercaDataLuogo(element){/*ricerca per date e luogo*/
-      this.listaRicerca= [];
-      await this.getViaggiFatti();
-      var x = 0;
-      for(var i = 0; i<this.listaViaggiFatti.length;i++){
-        if(element.Luogo.toLowerCase() === this.listaViaggiFatti[i].Luogo.toLowerCase() && element.Data.toLowerCase() === this.listaViaggiFatti[i].Data.toLowerCase()){
-          this.listaRicerca[x] = this.listaViaggiFatti[i];
-          x++;
-        }
-      }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
+    async ricercaLuogo(element){/*ricerca per luogo*/
+      var risposta = await fetch(`http://127.0.0.1:8000/api/viaggi-fatti/luogo/?search=${element.Luogo}`);
+      this.listaRicerca = await risposta.json();
     },
     async ricercaCompleta(element){/*ricerca completa*/
-      this.listaRicerca= [];
-      await this.getViaggiFatti();
-      var x = 0;
-      for(var i = 0; i<this.listaViaggiFatti.length;i++){
-        if(element.Luogo.toLowerCase() === this.listaViaggiFatti[i].Luogo.toLowerCase() && element.Data.toLowerCase() === this.listaViaggiFatti[i].Data.toLowerCase() && element.Titolo.toLowerCase() === this.listaViaggiFatti[i].Titolo.toLowerCase()){
-          this.listaRicerca[x] = this.listaViaggiFatti[i];
-          x++;
-        }
+      var elemento = '';
+      if(element.Titolo === null){
+         elemento = element.Data + '+' + element.Luogo;
+      }else if(element.Data === null){
+         elemento = element.Titolo + '+' + element.Luogo;
+      }else if(element.Luogo === null){
+         elemento = element.Titolo + '+' + element.Data;
+      }else{
+         elemento = element.Titolo + '+' + element.Data + '+' + element.Luogo;
       }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
+      var risposta = await fetch(`http://127.0.0.1:8000/api/viaggi-fatti/?search=${elemento}`);
+      this.listaRicerca = await risposta.json();
     },
     /*Fine Ricerca Viaggi Fatti*/
 
@@ -572,170 +440,39 @@ export default {
         this.ricercaDataVdF(element);
       }else if(element.Titolo === null && element.Data === null && element.Luogo !== null){
         this.ricercaLuogoVdF(element);
-      }
-      else if(element.Titolo !== null && element.Data === null && element.Luogo !== null){
-        this.ricercaTitoloLuogoVdF(element);
-      }
-      else if(element.Titolo === null && element.Data !== null && element.Luogo !== null){
-        this.ricercaDataLuogoVdF(element);
-      }
-      else if(element.Titolo !== null && element.Data !== null && element.Luogo === null){
-        this.ricercaTitoloDataVdF(element);
-      }else if(element.Titolo !== null && element.Data !== null && element.Luogo !== null){
+      }else{
         this.ricercaCompletaVdF(element);
       }
       this.ricercaON=true;
       this.ricercaOFF=false;
       this.btconferma=false;
     },
-    async ricercaTitoloVdF(element){
-      this.listaRicerca= [];
-      await this.getViaggiDaFare();
-      var x = 0;
-      var temp = 0;
-      var temp2 = 0;
-      for(var i = 0; i<this.listaViaggiDaFare.length;i++){
-        this.splitted = this.listaViaggiDaFare[i].Titolo.split(" ");
-        if(element.Titolo.split(" ").length<=1){
-          for(var y = 0; y<this.splitted.length;y++){
-            if(element.Titolo.toLowerCase() === this.splitted[y].toLowerCase()){
-              this.listaRicerca[x] = this.listaViaggiDaFare[i];
-              x++;
-            }
-          }
-        }else{
-          var splitted2 = element.Titolo.split(" ");
-          for(var w = 0; w<this.splitted.length;w++){
-            for(var z = 0; z<splitted2.length;z++){
-              if(splitted2[z].toLowerCase() === this.splitted[w].toLowerCase()){
-                temp2++;
-                if(temp2 === splitted2.length){
-                  this.Ricerca.Luogo = temp2;
-                  temp=splitted2.length;
-                  temp2=0;
-                }
-              }
-            }
-          }
-          if(temp === splitted2.length){
-            this.listaRicerca[x]=this.listaViaggiDaFare[i];
-            x++;
-            temp=0;
-          }
-        }
-      }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
+    async ricercaTitoloVdF(element){/*ricerca per titolo*/
+      this.Ricerca.Titolo = element.Titolo;
+      var risposta = await fetch(`http://127.0.0.1:8000/api/viaggi-da-fare/titolo/?search=${element.Titolo}`);
+      this.listaRicerca = await risposta.json();
     },
-    async ricercaDataVdF(element){
-      this.listaRicerca= [];
-      await this.getViaggiDaFare();
-      var x = 0;
-      for(var i = 0; i<this.listaViaggiDaFare.length;i++){
-        if(element.Data.toLowerCase() === this.listaViaggiDaFare[i].Data.toLowerCase()){
-          this.listaRicerca[x] = this.listaViaggiDaFare[i];
-          x++;
-        }
-      }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
+    async ricercaDataVdF(element){/*ricerca per data*/
+      var risposta = await fetch(`http://127.0.0.1:8000/api/viaggi-da-fare/data/?search=${element.Data}`);
+      this.listaRicerca = await risposta.json();
     },
-    async ricercaLuogoVdF(element){
-      this.listaRicerca= [];
-      await this.getViaggiDaFare();
-      var x = 0;
-      var temp = 0;
-      var temp2 = 0;
-      for(var i = 0; i<this.listaViaggiDaFare.length;i++){
-        this.splitted = this.listaViaggiDaFare[i].Luogo.split(" ");
-        if(element.Luogo.split(" ").length<=1){
-          for(var y = 0; y<this.splitted.length;y++){
-            if(element.Luogo.toLowerCase() === this.splitted[y].toLowerCase()){
-              this.listaRicerca[x] = this.listaViaggiDaFare[i];
-              x++;
-            }
-          }
-        }else{
-          var splitted2 = element.Luogo.split(" ");
-          for(var w = 0; w<this.splitted.length;w++){
-            for(var z = 0; z<splitted2.length;z++){
-              if(splitted2[z].toLowerCase() === this.splitted[w].toLowerCase()){
-                temp2++;
-                if(temp2 === splitted2.length){ 
-                  temp=splitted2.length;
-                  temp2=0;
-                }
-              }
-            }
-          }
-          if(temp === splitted2.length){
-            this.listaRicerca[x]=this.listaViaggiDaFare[i];
-            x++;
-            temp=0;
-          }
-        }
-      }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
+    async ricercaLuogoVdF(element){/*ricerca per luogo*/
+      var risposta = await fetch(`http://127.0.0.1:8000/api/viaggi-da-fare/luogo/?search=${element.Luogo}`);
+      this.listaRicerca = await risposta.json();
     },
-    async ricercaTitoloDataVdF(element){
-      this.listaRicerca= [];
-      await this.getViaggiDaFare();
-      var x = 0;
-      for(var i = 0; i<this.listaViaggiDaFare.length;i++){
-        if(element.Titolo.toLowerCase() === this.listaViaggiDaFare[i].Titolo.toLowerCase() && element.Data.toLowerCase() === this.listaViaggiDaFare[i].Data.toLowerCase()){
-          this.listaRicerca[x] = this.listaViaggiDaFare[i];
-          x++;
-        }
+    async ricercaCompletaVdF(element){/*ricerca completa*/
+      var elemento = '';
+      if(element.Titolo === null){
+         elemento = element.Data + '+' + element.Luogo;
+      }else if(element.Data === null){
+         elemento = element.Titolo + '+' + element.Luogo;
+      }else if(element.Luogo === null){
+         elemento = element.Titolo + '+' + element.Data;
+      }else{
+         elemento = element.Titolo + '+' + element.Data + '+' + element.Luogo;
       }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
-    },
-    async ricercaTitoloLuogoVdF(element){
-      this.listaRicerca= [];
-      await this.getViaggiDaFare();
-      var x = 0;
-      for(var i = 0; i<this.listaViaggiDaFare.length;i++){
-        if(element.Titolo.toLowerCase() === this.listaViaggiDaFare[i].Titolo.toLowerCase() && element.Luogo.toLowerCase() === this.listaViaggiDaFare[i].Luogo.toLowerCase()){
-          this.listaRicerca[x] = this.listaViaggiDaFare[i];
-          x++;
-        }
-      }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
-    },
-    async ricercaDataLuogoVdF(element){
-      this.listaRicerca= [];
-      await this.getViaggiDaFare();
-      var x = 0;
-      for(var i = 0; i<this.listaViaggiDaFare.length;i++){
-        if(element.Luogo.toLowerCase() === this.listaViaggiDaFare[i].Luogo.toLowerCase() && element.Data.toLowerCase() === this.listaViaggiDaFare[i].Data.toLowerCase()){
-          this.listaRicerca[x] = this.listaViaggiDaFare[i];
-          x++;
-        }
-      }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
-    },
-    async ricercaCompletaVdF(element){
-      this.listaRicerca= [];
-      await this.getViaggiDaFare();
-      var x = 0;
-      for(var i = 0; i<this.listaViaggiDaFare.length;i++){
-        if(element.Luogo.toLowerCase() === this.listaViaggiDaFare[i].Luogo.toLowerCase() && element.Data.toLowerCase() === this.listaViaggiDaFare[i].Data.toLowerCase() && element.Titolo.toLowerCase() === this.listaViaggiDaFare[i].Titolo.toLowerCase()){
-          this.listaRicerca[x] = this.listaViaggiDaFare[i];
-          x++;
-        }
-      }
-      if(x === 0){
-        this.listaRicerca= [];
-      }
+      var risposta = await fetch(`http://127.0.0.1:8000/api/viaggi-da-fare/?search=${elemento}`);
+      this.listaRicerca = await risposta.json();
     },
     /*Fine Ricerca Viaggi Da Fare*/
   }
