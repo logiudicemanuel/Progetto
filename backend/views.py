@@ -8,50 +8,104 @@ from .models import ViaggiDaFare
 
 #VIAGGI FATTI
 class ViaggiFattiViewSet(viewsets.ModelViewSet):
-    queryset = ViaggiFatti.objects.all()
+
+    def get_queryset(self): #permette la visualizzazione dei dati limitata all'utente attualmente loggato
+        user = self.request.user
+        if not user.is_anonymous : 
+            return ViaggiFatti.objects.filter(Autore=user)
+        return ViaggiFatti.objects.none()
+
     serializer_class = ViaggiFattiSerializers
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Titolo','Data','Luogo',)
 
-class RicercaTitoloVF(viewsets.ModelViewSet):#FILTRA SOLO PER TITOLO
-    queryset = ViaggiFatti.objects.all()
+    def perform_create(self, serializer):#assegna automaticamente l'utente loggato come autore
+        serializer.save(Autore=self.request.user)
+
+class RicercaTitoloVF(viewsets.ModelViewSet):#ricerca solo per titolo
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_anonymous : 
+            return ViaggiFatti.objects.filter(Autore=user)
+        return ViaggiFatti.objects.none()
+        
     serializer_class = ViaggiFattiSerializers
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Titolo',)
 
-class RicercaDataVF(viewsets.ModelViewSet):#FILTRA SOLO PER DATA
-    queryset = ViaggiFatti.objects.all()
+class RicercaDataVF(viewsets.ModelViewSet):#ricerca solo per data
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_anonymous : 
+            return ViaggiFatti.objects.filter(Autore=user)
+        return ViaggiFatti.objects.none()
+
     serializer_class = ViaggiFattiSerializers
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Data',)
 
-class RicercaLuogoVF(viewsets.ModelViewSet):#FILTRA SOLO PER LUOGO
-    queryset = ViaggiFatti.objects.all()
+class RicercaLuogoVF(viewsets.ModelViewSet):#ricerca solo per luogo
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_anonymous : 
+            return ViaggiFatti.objects.filter(Autore=user)
+        return ViaggiFatti.objects.none()
+
     serializer_class = ViaggiFattiSerializers
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Luogo',)
 
 #VIAGGI DA FARE
 class ViaggiDaFareViewSet(viewsets.ModelViewSet):
-    queryset = ViaggiDaFare.objects.all()
+
+    def get_queryset(self):#permette la visualizzazione dei dati limitata all'utente attualmente loggato
+        user = self.request.user
+        if not user.is_anonymous : 
+            return ViaggiDaFare.objects.filter(Autore=user)
+        return ViaggiDaFare.objects.none()
+    
     serializer_class = ViaggiDaFareSerializers
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Titolo','Data','Luogo',)
 
-class RicercaTitoloVdF(viewsets.ModelViewSet):#FILTRA SOLO PER TITOLO
-    queryset = ViaggiDaFare.objects.all()
+    def perform_create(self, serializer):#assegna automaticamente l'utente loggato come autore
+        serializer.save(Autore=self.request.user)
+
+class RicercaTitoloVdF(viewsets.ModelViewSet):#ricerca solo per titolo
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_anonymous : 
+            return ViaggiDaFare.objects.filter(Autore=user)
+        return ViaggiDaFare.objects.none()
+
     serializer_class = ViaggiDaFareSerializers
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Titolo',)
 
-class RicercaDataVdF(viewsets.ModelViewSet):#FILTRA SOLO PER DATA
-    queryset = ViaggiDaFare.objects.all()
+class RicercaDataVdF(viewsets.ModelViewSet):#ricerca solo per data
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_anonymous : 
+            return ViaggiDaFare.objects.filter(Autore=user)
+        return ViaggiDaFare.objects.none()
+
     serializer_class = ViaggiDaFareSerializers
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Data',)
 
-class RicercaLuogoVdF(viewsets.ModelViewSet):#FILTRA SOLO PER LUOGO
-    queryset = ViaggiDaFare.objects.all()
+class RicercaLuogoVdF(viewsets.ModelViewSet):#ricerca solo per luogo
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_anonymous : 
+            return ViaggiDaFare.objects.filter(Autore=user)
+        return ViaggiDaFare.objects.none()
+
     serializer_class = ViaggiDaFareSerializers
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Luogo',)
